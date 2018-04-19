@@ -56,7 +56,7 @@ def parse(src):
                 'type': 'Feature',
                 'geometry': {
                     'type': 'Polygon',
-                    'coordinates': coordinates
+                    'coordinates': coords
                 },
                 'properties': props
             })
