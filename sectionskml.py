@@ -49,13 +49,14 @@ def parse(src):
             props = {}
             for prop in data:
                     props.update({prop.attrib['name']: prop.value.text})
-
+            # Clean coordinates data
+            c_coords = [float(c) for c in polygon.coordinates.text.strip().replace('\n', ',').replace(' ', '').split(',') if c != '0']
+            coords = [str(lat)+' '+str(lon) for lat,lon in zip(c_coords[0::2],c_coords[1::2])]
             JSONpolygon.append({
                 'type': 'Feature',
                 'geometry': {
                     'type': 'Polygon',
-                    'coordinates':
-                    [float(c) for c in polygon.coordinates.text.strip().replace('\n', ',').replace(' ', '').split(',') if c != '0']
+                    'coordinates': coordinates
                 },
                 'properties': props
             })
