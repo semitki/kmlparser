@@ -55,7 +55,7 @@ def parse(src):
                 'geometry': {
                     'type': 'Polygon',
                     'coordinates':
-                    [float(c) for c in polygon.coordinates.text.strip().replace('\n', ',').replace(' ', '').split(',')]
+                    [float(c) for c in polygon.coordinates.text.strip().replace('\n', ',').replace(' ', '').split(',') if c != '0']
                 },
                 'properties': props
             })
