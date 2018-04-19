@@ -48,7 +48,7 @@ def parse(src):
             data = el.ExtendedData.Data
             props = {}
             for prop in data:
-                    props.update({prop.attrib['name']: prop.text})
+                    props.update({prop.attrib['name']: prop.value.text})
 
             JSONpolygon.append({
                 'type': 'Feature',
