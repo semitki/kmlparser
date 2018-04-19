@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import logging
+import traceback
 from pykml.factory import write_python_script_for_kml_document
 from pykml import parser
 import urllib
@@ -10,6 +11,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, JSON, ForeignKey
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from util import build_url, engine
 
 #log = logging.getLogger()
 
@@ -23,7 +25,7 @@ def engine():
     echo = False
     if 'PYTHON_ENV' in os.environ and os.environ['PYTHON_ENV'] == 'development':
         echo=True
-        return create_engine(os.environ['GERRI_DBURL'],
+        return create_engine(os.environ['KML_DBURL'],
                          echo=echo)
 
 
@@ -50,7 +52,7 @@ def build_url (path, scheme='http'):
 
 
 def parse(src):
-    kml_file = urllib.urlopen(build_url(os.path.join(os.environ['GERRI_DATA'],
+    kml_file = urllib.urlopen(build_url(os.path.join(os.environ['KML_DATA'],
                                                        src),
                                           'file'))
     doc = parser.parse(kml_file).getroot()
@@ -69,13 +71,14 @@ def parse(src):
                 'type': 'Feature',
                 'geometry': {
                     'type': 'Polygon',
-                    'coordinates': polygon.coordinates.text.strip().split(',')
+                    'coordinates':
+                    [float(c) for c in polygon.coordinates.text.strip().replace('\n',',').replace(' ','').split(',')]
                 },
                 'properties': props
             })
 
     except Exception:
-        print(Exception)
+        print(traceback.format_exc())
 
 
     return JSONpolygon
