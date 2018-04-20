@@ -16,10 +16,10 @@ base; `KML_DATA` directory where `.kml` files are read from.
     export PYTHON_ENV=development
 
 
-Install dependencies
+### Install dependencies
 
 
-    virtualenv ENV
+    virtualenv -p python2.7 ENV
     . ENV/bin/activate
     pip install -r requirements.txt
 
@@ -27,8 +27,20 @@ Install dependencies
 ### Import kml into PostgreSQL
 
 
-    python kml.py <Source.kml>
+    python <blocks|sections>kml.py <Source.kml>
+
+
+A lot of kmls?
+
+
+    for n in $(seq 1 <N>); do
+      python <blocks|sections>kml.py <Source.kml>$n.kml
+    done
+
 
 
 ### SQL Queries
 
+
+    psql < sql/json2sf.sql
+    psql < sql/coveredby.sql
