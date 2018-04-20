@@ -23,16 +23,16 @@ from (
 ) as m where manzanas_geojson.id = m.id;
 
 
---drop table if exists secciones_geo;
+drop table if exists secciones_geo;
 
---create table secciones_geo(
---  gid integer primary key,
---  geom geometry(Polygon, 4326));
+create table secciones_geo(
+  gid integer primary key,
+  geom geometry(Polygon, 4326));
 
---insert into secciones_geo (gid, geom)
---select gid,
---  ST_GEOMFROMTEXT('POLYGON(('||replace(replace(replace(geojson->'geometry'->>'coordinates','"',''),'[',''),']','')||'))',4326)
---  as geom
---  from secciones_geojson;
+insert into secciones_geo (gid, geom)
+select gid,
+  ST_GEOMFROMTEXT('POLYGON(('||replace(replace(replace(geojson->'geometry'->>'coordinates','"',''),'[',''),']','')||'))',4326)
+  as geom
+  from secciones_geojson;
 
 

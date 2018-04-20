@@ -28,8 +28,8 @@ class Manzana(Base):
     seccion = Column(Integer, nullable=True)
     #seccion = Column(Integer, ForeignKey('public.api_seccion.id'), nullable=True)
     geojson = Column(JSON, nullable=True)
-    wkb = Column(Geometry('POLYGON'), nullable=True)
-    meta = Column(JSON, nullable=True)
+    wkb = Column(Geometry(geometry_type='POLYGON', srid=4326), nullable=True)
+    properties = Column(JSON, nullable=True)
 
 
 def insert(JSONpolygon, session):
@@ -38,7 +38,7 @@ def insert(JSONpolygon, session):
         manzanas.append(Manzana(name=poly['properties']['CVEGEO'],
                                 geojson={'type':poly['type'],
                                          'geometry':poly['geometry']},
-                                meta=poly['properties']))
+                                properties=poly['properties']))
     session.add_all(manzanas)
     session.commit()
 
