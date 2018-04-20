@@ -10,6 +10,7 @@ import urllib
 from sqlalchemy import Column, Integer, String, JSON, ForeignKey
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from geoalchemy2 import Geometry
 from util import build_url, engine
 
 #log = logging.getLogger()
@@ -26,14 +27,18 @@ class Manzana(Base):
     name = Column(String)
     seccion = Column(Integer, nullable=True)
     #seccion = Column(Integer, ForeignKey('public.api_seccion.id'), nullable=True)
-    geojson = Column(JSON)
+    geojson = Column(JSON, nullable=True)
+    wkb = Column(Geometry('POLYGON'), nullable=True)
+    meta = Column(JSON, nullable=True)
 
 
 def insert(JSONpolygon, session):
     manzanas = []
     for poly in JSONpolygon:
         manzanas.append(Manzana(name=poly['properties']['CVEGEO'],
-                geojson=poly))
+                                geojson={'type':poly['type'],
+                                         'geometry':poly['geometry']},
+                                meta=poly['properties']))
     session.add_all(manzanas)
     session.commit()
 

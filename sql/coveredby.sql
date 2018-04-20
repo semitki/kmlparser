@@ -6,17 +6,18 @@ BEGIN
       select st_buffer(
         (select geom
           from manzanas_geo where id=manzana_id
-        ), 10) as manzana,
+        ), 0.1) as manzana,
       st_buffer(
         (select geom
           from secciones_geo where gid = seccion_gid
-        ), 20) as seccion
+        ), 0.1) as seccion
     ) as foo
   )
   then
     update manzanas_geojson set seccion = seccion_gid where id = manzana_id;
     return 1;
   else
+    update manzanas_geojson set seccion = null where id = manzana_id;
     return 0;
   end if;
 END;
