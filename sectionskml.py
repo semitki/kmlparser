@@ -29,7 +29,8 @@ class Section(Base):
 def insert(JSONpolygon, session):
     sections = []
     for poly in JSONpolygon:
-        sections.append(Section(geojson=poly))
+        sections.append(Section(gid=poly['properties']['seccion'],
+                                geojson=poly))
     session.add_all(sections)
     session.commit()
 

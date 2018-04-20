@@ -38,3 +38,19 @@
           from secciones_geojson where gid = 1
         ), 20) as seccion
     ) as foo;
+
+
+
+    select st_coveredby(manzana, seccion) as maninsec
+    from (
+      select st_buffer(
+        (select st_geomfromtext(
+          'POLYGON(('||replace(replace(replace(geojson->'geometry'->>'coordinates','"',''),'[',''),']','')||'))')
+          from manzanas_geojson where id=883
+        ), 10) as manzana,
+      st_buffer(
+        (select st_geomfromtext(
+          'POLYGON(('||replace(replace(replace(geojson->'geometry'->>'coordinates','"',''),'[',''),']','')||'))')
+          from secciones_geojson where gid = 1
+        ), 20) as seccion
+    ) as foo limit 10;
