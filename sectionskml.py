@@ -10,6 +10,7 @@ import urllib
 from sqlalchemy import Column, Integer, String, JSON, ForeignKey
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from geoalchemy2 import Geometry
 from util import build_url, engine
 
 #log = logging.getLogger()
@@ -22,15 +23,16 @@ Base = declarative_base()
 
 class Section(Base):
     __tablename__ = 'secciones_geojson'
-    gid = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     geojson = Column(JSON)
+    wkb = Column(Geometry(geometry_type='POLYGON', srid=4326))
 
 
 def insert(JSONpolygon, session):
     sections = []
     for poly in JSONpolygon:
-        sections.append(Section(gid=poly['properties']['seccion'],
-                                geojson=poly))
+        sections.append(Section(id=poly['properties']['seccion'],
+                                geojson=poly, wkb=None))
     session.add_all(sections)
     session.commit()
 
