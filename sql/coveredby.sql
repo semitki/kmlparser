@@ -17,7 +17,7 @@ BEGIN
     update manzanas_geojson set seccion = seccion_id where id = manzana_id;
     return 1;
   else
-    select 'no';
+    perform 'no';
     return 0;
   end if;
 END;
