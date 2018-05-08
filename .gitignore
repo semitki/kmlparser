@@ -1,3 +1,5 @@
 ENV
 *.pyc
 ENV
+!migrations/manage.py
+manage.py
