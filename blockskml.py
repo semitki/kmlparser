@@ -83,6 +83,7 @@ def main():
     Session.configure(bind=eng)
     session = Session()
     if 'KML_BOOTSTRAP' in os.environ:
+        # TODO Use migrations instead
         Base.metadata.create_all(eng)
     insert(parse(src), session)
 
