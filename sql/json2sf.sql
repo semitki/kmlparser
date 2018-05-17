@@ -6,11 +6,12 @@ drop table if exists manzanas_geo;
 create table manzanas_geo(
   id integer primary key,
   cvegeo varchar(255),
+  manzana integer,
   geom geometry(Polygon, 4326)); -- 0 defaults to 4326 WSG834
 
 -- Raw data as importe from KML sources is dirty, some replace magi for cleanup
-insert into manzanas_geo (id, cvegeo, geom)
-select id, geojson->'properties'->>'CVEGEO' as cvegeo,
+insert into manzanas_geo (id, cvegeo, manzana, geom)
+select id, geojson->'properties'->>'CVEGEO' as cvegeo, manzana,
   ST_GEOMFROMTEXT(
   'POLYGON(('||replace(replace(replace(geojson->'geometry'->>'coordinates','"',''),'[',''),']','')||'))',4326)
   as geom

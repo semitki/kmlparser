@@ -3,3 +3,4 @@ ENV
 ENV
 !migrations/manage.py
 manage.py
+*.dump

@@ -25,6 +25,7 @@ class Manzana(Base):
     __tablename__ = 'manzanas_geojson'
     id = Column(Integer, primary_key=True)
     cvegeo = Column(String)
+    manzana = Column(Integer)
     seccion = Column(Integer, nullable=True)
     geojson = Column(JSON, nullable=True)
     wkb = Column(Geometry(geometry_type='POLYGON', srid=4326), nullable=True)
@@ -35,6 +36,7 @@ def insert(JSONpolygon, session):
     manzanas = []
     for poly in JSONpolygon:
         manzanas.append(Manzana(cvegeo=poly['properties']['CVEGEO'],
+                                manzana=poly['properties']['MZA'],
                                 seccion=None,
                                 geojson={'type':poly['type'],
                                          'geometry':poly['geometry']},

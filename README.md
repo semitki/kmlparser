@@ -44,3 +44,21 @@ A lot of kmls?
 
     psql < sql/json2sf.sql
     psql < sql/coveredby.sql
+
+
+Update relationship between manzanas and sections
+
+
+    select update_seccion_manzanas(m.id, 1573)
+      from (select id from manzanas_geojson) as m;
+
+
+Faster variation?
+
+
+    select update_seccion_manzanas(m.id, 1573)
+      from (select id,seccion from manzanas_geojson) as m
+      where m.seccion is null;
+
+
+

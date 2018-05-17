@@ -1,20 +1,15 @@
-create or replace function update_seccion_manzanas(manzana_id integer, seccion_id integer) returns integer as $$
+create or replace function update_sec_blocks(block_id integer, section_id integer) returns integer as $$
+-- 1594 sectio
+-- 46680, 46687
 BEGIN
   if (
-    select st_coveredby(manzana, seccion) as maninsec
-    from (
-      select st_buffer(
-        (select geom
-          from manzanas_geo where id=manzana_id
-        ), 1) as manzana,
-      st_buffer(
-        (select geom
-          from secciones_geo where id = seccion_id
-        ), 1.5) as seccion
+    select st_coveredby(manzana, seccion) as man_sec
+    from (select st_buffer((select wkb from manzanas_geojson where id = block_id), 1.005) as manzana,
+      st_buffer((select wkb from secciones_geojson where id = section_id), 1.05) as seccion
     ) as foo
   )
   then
-    update manzanas_geojson set seccion = seccion_id where id = manzana_id;
+    update manzanas_geojson set seccion = section_id where id = block_id;
     return 1;
   else
     perform 'no';
