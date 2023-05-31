@@ -1,4 +1,4 @@
-# kmlparse
+# kmlparse (Archived)
 
 
 #### Requires Python 2 (Python 3 support on the way)
